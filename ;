@@ -1,0 +1,11 @@
+cstring* new_cstring(int length){
+  cstring my_cstring;
+  my_cstring->i = (char *) malloc(length);
+  my_cstring->length = length;
+  my_cstring->pos = 0;
+  return &my_cstring;
+}
+
+char last_char(cstring* this){
+  return this->i[length - 1];
+}
