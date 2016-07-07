@@ -9,6 +9,9 @@ int main(int argc, char **argv){
     return -1;
   }
   char* filename = argv[1];
+  char* ssss;
+  ssss = filename;
+
 
   FILE *pInputFile;
   pInputFile = fopen(filename, "r");
@@ -21,10 +24,10 @@ int main(int argc, char **argv){
   pOutputFile = fopen("output/out.asm", "w");
 
   cstring* data;
-  data = (cstring*) malloc(1000);
+  data = (cstring*) malloc(sizeof(cstring) * 1000);
   int dataIdx = 0;
   cstring* text;
-  text = (cstring*) malloc(1000);
+  text = (cstring*) malloc(sizeof(cstring) * 1000);
   int textIdx = 0;
 
   int levelsDeep = 0;
@@ -32,12 +35,12 @@ int main(int argc, char **argv){
   char line[2560];
   //array of 15 pointers
   //char** tokens = (char**) malloc(15);
-  cstring* tokens = (cstring*) malloc(15);
+  cstring* tokens = (cstring*) malloc(sizeof(cstring) * 15);
   int currToken = 0;
 
   //char** functionStack = (char**) malloc(50);
   //char* pNull = "NULL";
-  cstring* functionStack = (cstring*) malloc(50);
+  cstring* functionStack = (cstring*) malloc(sizeof(cstring) * 50);
 
   functionStack = new_cstring(10);
   functionStack->i = "NULL";
@@ -64,7 +67,7 @@ int main(int argc, char **argv){
 
       if( curr.i[0]  == '"' ){
         //is string
-        char* str = (char*) malloc(100);
+        char* str = (char*) malloc(sizeof(char) * 100);
         //TODO all strings are named out_string...
         sprintf(str, "out_string:  .asciiz %s", curr.i);
         data[dataIdx++] = *into_cstring(str);
@@ -111,27 +114,17 @@ cstring* getToken(char* line){
   if(tokenSize <= 0){
     return NULL;
   }
+  cstring* my_cstring = new_cstring(tokenSize);
+  char* ptr = my_cstring->i;
 
-  //char* token = (char*) malloc(tokenSize);
-  cstring* token;
-  token->length = tokenSize;
-  token->i = (char*) malloc(25);
-
-  //copy token to new string
   int i;
   for(i = 0; i < tokenSize; i++){
-    token->i = *line;
-    token->i++;
+    *ptr = *line;
+    ptr++;
     line++;
   }
 
-  //TODO i should be using new pointers rather than resetting
-  //restore token pointer to beginning
-  for(i = 0; i < tokenSize; i++){
-    token->i--;
-  }
-
-  return token;
+  return into_cstring(line);
 }
 
 int getTokenPos(char* line){

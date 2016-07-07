@@ -1,22 +1,23 @@
 #include "cstring.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 cstring* new_cstring(int length){
-  cstring* my_cstring;
-  my_cstring->i = (char *) malloc(length);
+  cstring* my_cstring = (cstring*) malloc(sizeof(cstring));
+  my_cstring->i = (char*) malloc(sizeof(char) * length + 1);
   my_cstring->length = length;
   my_cstring->pos = 0;
-  return &my_cstring;
+  return my_cstring;
 }
 
 cstring* into_cstring(char* str){
-  cstring* my_cstring;
+  cstring* my_cstring = (cstring*) malloc(sizeof(cstring));
   my_cstring->i = str;
   int idx = 0;
   while(str[idx++] != '\0');
   my_cstring->length = idx + 1;
   my_cstring->pos = 0;
-  return &my_cstring;
+  return my_cstring;
 }
 
 int isCleanable(char c){
@@ -39,7 +40,7 @@ void clean(cstring* this){
     }
   }
 
-  char* clean_str = (char*) malloc (count + 1);
+  char* clean_str = (char*) malloc(sizeof(char) * count + 1);
 
   for(i = 0; i < this->length; i++){
     char curr = this->i[i];
