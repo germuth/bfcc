@@ -3,6 +3,7 @@
 #include "bfcc.h"
 #include "cstring.h"
 #include "string.h"
+#include "parse.h"
 
 int main(int argc, char **argv){
   if(argc <= 0){
@@ -32,7 +33,8 @@ int main(int argc, char **argv){
 
   int levelsDeep = 0;
 
-  char line[2560];
+  int MAX_LINE_LENGTH = 120;
+  char* line = (char*) malloc(sizeof(char) * MAX_LINE_LENGTH);
   //array of 15 pointers
   //char** tokens = (char**) malloc(15);
   cstring* tokens = (cstring*) malloc(sizeof(cstring) * 15);
@@ -47,15 +49,15 @@ int main(int argc, char **argv){
   functionStack++;
 
   //TODO no point in going line by line anymore, just grab tokens...
-  while(fgets(line, sizeof(line), pInputFile)){
-    cstring* token = getToken(line);
+  while(fgets(line, MAX_LINE_LENGTH, pInputFile)){
+    cstring* token = getToken(&line);
     while(token != NULL){
       //handle token
       //remove brackets, semicolons, etc
       clean(token);
       tokens[currToken++] = *token;
 
-      token = getToken(line);
+      token = getToken(&line);
     }
 
     int i;
@@ -107,45 +109,3 @@ int main(int argc, char **argv){
   fclose(pInputFile);
   exit(EXIT_SUCCESS);
 }
-
-//advances down the line and returns the token it passed through
-cstring* getToken(char* line){
-  int tokenSize = getTokenPos(line);
-  if(tokenSize <= 0){
-    return NULL;
-  }
-  cstring* my_cstring = new_cstring(tokenSize);
-  char* ptr = my_cstring->i;
-
-  int i;
-  for(i = 0; i < tokenSize; i++){
-    *ptr = *line;
-    ptr++;
-    line++;
-  }
-
-  return into_cstring(line);
-}
-
-int getTokenPos(char* line){
-  int count = 0;
-  int space = 0;
-  while(!space){
-    if(*line == ' '){
-      space = 1;
-    }else if(*line == '\0'){
-      //reached end of string
-      space = 1;
-    } else {
-      count++;
-      line++;
-    }
-  }
-  //restore pointer to original starting point
-  int i;
-  for(i = 0; i < count; i++){
-    line--;
-  }
-  return count;
-}
-

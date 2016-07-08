@@ -20,37 +20,6 @@ cstring* into_cstring(char* str){
   return my_cstring;
 }
 
-int isCleanable(char c){
-  if(c == '(' || c== ')'){
-    return 1;
-  } else if(c == ';'){
-    return 1;
-  }
-  return 0;
-}
-
-void clean(cstring* this){
-  //count good characters
-  int i;
-  int count = 0;
-  for(i = 0 ; i < this->length; i++){
-    char curr = this->i[i];
-    if( !isCleanable(curr) ){
-      count++;
-    }
-  }
-
-  char* clean_str = (char*) malloc(sizeof(char) * count + 1);
-
-  for(i = 0; i < this->length; i++){
-    char curr = this->i[i];
-    if( !isCleanable(curr)){
-      clean_str[0] = curr;
-    }
-  }
-  this->i = &clean_str;
-}
-
 char last_char(cstring* this){
   return this->i[this->length - 1];
 }
