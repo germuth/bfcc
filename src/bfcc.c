@@ -37,7 +37,7 @@ int main(int argc, char **argv){
   char* line = (char*) malloc(sizeof(char) * MAX_LINE_LENGTH);
   //array of 15 pointers
   //char** tokens = (char**) malloc(15);
-  cstring* tokens = (cstring*) malloc(sizeof(cstring) * 15);
+  token* tokens = (token*) malloc(sizeof(token) * 15);
   int currToken = 0;
 
   //char** functionStack = (char**) malloc(50);
@@ -50,20 +50,20 @@ int main(int argc, char **argv){
 
   //TODO no point in going line by line anymore, just grab tokens...
   while(fgets(line, MAX_LINE_LENGTH, pInputFile)){
-    cstring* token = getToken(&line);
+    token* token = getNextToken(&line);
     while(token != NULL){
       //handle token
       //remove brackets, semicolons, etc
-      clean(token);
+      clean(token->str);
       tokens[currToken++] = *token;
 
-      token = getToken(&line);
+      token = getNextToken(&line);
     }
 
     int i;
     //TODO perhaps state machine might be nice?
     for(i = 0; i <= currToken; i++){
-      cstring curr = tokens[i];
+      cstring curr = *(tokens[i].str);
 
       //isLiteral (num, string)
 
@@ -79,7 +79,7 @@ int main(int argc, char **argv){
         //is user function
 
         //is system function
-        if( strcmp(token->i,"printf")) {
+        if( strcmp(curr.i,"printf")) {
         }else{
           text[textIdx++] = *into_cstring("li $v0, 4"); //system call code for printing string
           //TODO we always print out_string...

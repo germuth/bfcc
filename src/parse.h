@@ -4,7 +4,6 @@
 #include "cstring.h"
 #include "token.h"
 
-token* getToken(char** pLine);
-void clean(token* my_cstring);
+token* getNextToken(char** pLine);
 
 #endif //PARSE_H

@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-token* new_token(cstring* str, token_type type){
+token* new_token(cstring str, token_type type){
   token* t = (token*) malloc(sizeof(token));
   t->str = str;
   t->type = type;
