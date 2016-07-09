@@ -52,9 +52,10 @@ int main(int argc, char **argv){
   while(fgets(line, MAX_LINE_LENGTH, pInputFile)){
     token* token = getNextToken(&line);
     while(token != NULL){
+      printf("%s\n", token->str.i);
       //handle token
       //remove brackets, semicolons, etc
-      clean(token->str);
+      //clean(&(token->str));
       tokens[currToken++] = *token;
 
       token = getNextToken(&line);
@@ -63,7 +64,7 @@ int main(int argc, char **argv){
     int i;
     //TODO perhaps state machine might be nice?
     for(i = 0; i <= currToken; i++){
-      cstring curr = *(tokens[i].str);
+      cstring curr = tokens[i].str;
 
       //isLiteral (num, string)
 

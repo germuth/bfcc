@@ -3,7 +3,7 @@
 
 #include "cstring.h"
 
-typedef enum {STRING, NUMBER, FUNCTION} token_type;
+typedef enum {STRING, NUMBER, FUNCTION, OTHER} token_type;
 typedef struct {
   cstring str;
   token_type type;

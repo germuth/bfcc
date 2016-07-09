@@ -45,6 +45,7 @@ void clean(cstring* my_cstring){
     p++;
   }
   *q = '\0';
+  my_cstring->length = (q - my_cstring->i);
 }
 
 int isCleanable(char c){

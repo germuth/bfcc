@@ -12,9 +12,16 @@ token* getNextToken(char** pLine){
   while(**pLine == ' '){
     (*pLine)++;
   }
+  if(**pLine == '\n'){
+    return NULL;
+  }
 
   token* t = getToken(*pLine);
-  advanceCursor(pLine, t->str->length);
+  int skips = t->str.length;
+  if(t->type == STRING){
+    skips += 2; //skip opening and closing "
+  }
+  advanceCursor(pLine, skips);
   return t;
 }
 
@@ -22,13 +29,19 @@ token* getToken(char* line){
   char* endChars; //inclusive
   token_type type;
 
-  if(*line == '"'){
+  //trying to avoid adding semantic meaning, that comes later
+  if(strchr("(){}[]+-*/=;", *line)){
+    char* str = (char*) malloc(sizeof(char));
+    *str = *line;
+    line++;
+    return new_token(*into_cstring(str), OTHER);
+  }else if(*line == '"'){
     type = STRING;
-    endChars = "\"\0";
+    endChars = "\"";
     line++; //skip over first "
   }else{
-    type = FUNCTION;
-    endChars = " ;\0";
+    type = OTHER;
+    endChars = " (){}[]+-*/=;\n";
   }
 
   char* str = (char*) malloc(sizeof(char) * TOKEN_MAX_SIZE);
@@ -41,11 +54,6 @@ token* getToken(char* line){
   }
   *p = '\0';
   cstring* cstr = into_cstring(str);
-
-  //pointer arithmetic. yes im that kind of programmer
-  if(p - str <= 0){
-    return NULL;
-  }
 
   return new_token(*cstr, type);
 }
