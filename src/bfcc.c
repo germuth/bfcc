@@ -9,6 +9,7 @@ int main(int argc, char **argv){
   if(argc <= 0){
     return -1;
   }
+  /*
   char* filename = argv[1];
   char* ssss;
   ssss = filename;
@@ -16,6 +17,8 @@ int main(int argc, char **argv){
 
   FILE *pInputFile;
   pInputFile = fopen(filename, "r");
+  */
+  pInputFile = fopen("input/test.bfc", "r");
   //fp = fopen("/etc/vim/vimrc", "r");
   if (pInputFile == NULL){
     exit(EXIT_FAILURE);
@@ -60,7 +63,25 @@ int main(int argc, char **argv){
 
       token = getNextToken(&line);
     }
+  }
+  //parsing done
 
+  //should combine tokens into expressions, ex
+  //char* my_str; is four tokens but one 'expression'
+  //printf("hello world");
+  //is two expressions, expression has return value
+  //but still need expression tree
+
+  //assign semantic labels to tokens in each line
+  //and create tree of execution order
+  int i = 0;
+  //for each statement
+  while(1){
+    token* t = tokens[i++];
+    tree* tree = new_tree(t);
+
+  }
+/*
     int i;
     //TODO perhaps state machine might be nice?
     for(i = 0; i <= currToken; i++){
@@ -106,6 +127,7 @@ int main(int argc, char **argv){
     fprintf(pOutputFile, "li $v0, 10");//load terminate program
     fprintf(pOutputFile, "syscall");//execute prev loaded program
   }
+  */
 
   fclose(pInputFile);
   exit(EXIT_SUCCESS);
