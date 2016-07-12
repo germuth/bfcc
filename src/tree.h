@@ -5,9 +5,9 @@
 
 typedef struct {
   token root;
-  tree* left;
-  tree* middle;
-  tree* right;
+  struct tree* left;
+  struct tree* middle;
+  struct tree* right;
   //lets just hardcode 3 children for now until i figure out arraylist
   //tree** children;//list of pointers to children
 } tree;
