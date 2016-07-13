@@ -114,9 +114,20 @@ int main(int argc, char **argv){
           curr.type = NUMBER;
         }else if(isalpha(c)){
           //this is crap, my compiler will have switching on strings!
+
           //char,int,float,double,one of the declared structs, all the types
           //if(strcmp(curr.i, "char")){
+          //curr.type = TYPE;
           //}
+
+          //if(curr.i is keyword){
+          //for,if,while,return
+
+
+          //if(curr.i in environment){
+          //  curr.type = VARIABLE/IDENTIFIER
+
+
           curr.type = FUNCTION;
         }else{
           printf("Unknown symbol");
@@ -139,6 +150,11 @@ int main(int argc, char **argv){
   //is two expressions, expression has return value
   //but still need expression tree
 
+  //this is so messy my god help
+  token** expLines = (token**) malloc(sizeof(token*) * MAX_NUM_LINES);
+  trken* currLine = *tokenLines;
+  for(i = 0; i < currLine; i++){
+  }
   //assign semantic labels to tokens in each line
   //and create tree of execution order
   //for each statement
