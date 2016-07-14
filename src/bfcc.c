@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include "bfcc.h"
+#include "tree.h"
+#include "tree.h"
 #include "cstring.h"
 #include "string.h"
 #include "parse.h"
@@ -9,6 +11,12 @@
 int MAX_LINE_LENGTH = 120;
 int MAX_NUM_LINES=1000;
 int MAX_TOKEN_PER_LINE=20;
+
+
+token* tokens;
+int currToken;
+token** tokenLines;
+
 int main(int argc, char **argv){
   if(argc <= 0){
     return -1;
@@ -43,8 +51,8 @@ int main(int argc, char **argv){
   char* line = (char*) malloc(sizeof(char) * MAX_LINE_LENGTH);
   //array of 15 pointers
   //char** tokens = (char**) malloc(15);
-  token* tokens = (token*) malloc(sizeof(token) * 15);
-  int currToken = 0;
+  tokens = (token*) malloc(sizeof(token) * 15);
+  currToken = 0;
 
   //char** functionStack = (char**) malloc(50);
   //char* pNull = "NULL";
@@ -67,10 +75,45 @@ int main(int argc, char **argv){
       token = getNextToken(&line);
     }
   }
-  //parsing done
 
+  determineTokenType();
+
+  //should combine tokens into expressions, ex
+  //char* my_str; is four tokens but one 'expression'
+  //printf("hello world");
+  //is two expressions, expression has return value
+  //but still need expression tree
+
+  //this is so messy my god help
+  tree* expTrees = new (tree*) malloc(sizeof(tree) * MAX_NUM_LINES);
+  tree* currTree = expTrees;
+
+  token* currLine = *tokenLines;
+  int i;
+  for(i = 0; i < currLine; i++){
+    if(currTree == NULL){
+      expression* root = new_expression();
+      root->type = ROOT;
+      currTree = new_tree(root);
+    }
+    token curr = *currLine;
+    
+    if(curr.type == TYPE){
+      //this and next are expression
+      //recursive procedure to attach next tokens as expression to current tree
+      //this way we can have func( x+y, func2(y*z) )
+      //if we need to attach root expression node, perhaps each line should root
+      //node
+    }
+  }
+
+  fclose(pInputFile);
+  exit(EXIT_SUCCESS);
+}
+
+void determineTokenType(){
   //assign tokens types and place into lines
-  token** tokenLines = (token**) malloc(sizeof(token*) * MAX_NUM_LINES);
+  tokenLines = (token**) malloc(sizeof(token*) * MAX_NUM_LINES);
   token* currLine = *tokenLines;
   int i;
   int currLinePos = 0;
@@ -144,75 +187,4 @@ int main(int argc, char **argv){
 
     printf("%s\n", curr.str.i);
   }
-  //should combine tokens into expressions, ex
-  //char* my_str; is four tokens but one 'expression'
-  //printf("hello world");
-  //is two expressions, expression has return value
-  //but still need expression tree
-
-  //this is so messy my god help
-  token** expLines = (token**) malloc(sizeof(token*) * MAX_NUM_LINES);
-  trken* currLine = *tokenLines;
-  for(i = 0; i < currLine; i++){
-  }
-  //assign semantic labels to tokens in each line
-  //and create tree of execution order
-  //for each statement
-  /*
-  while(1){
-    token* t = tokens[i++];
-    tree* tree = new_tree(t);
-
-  }
-  */
-/*
-    int i;
-    //TODO perhaps state machine might be nice?
-    for(i = 0; i <= currToken; i++){
-      cstring curr = tokens[i].str;
-
-      //isLiteral (num, string)
-
-      if( curr.i[0]  == '"' ){
-        //is string
-        char* str = (char*) malloc(sizeof(char) * 100);
-        //TODO all strings are named out_string...
-        sprintf(str, "out_string:  .asciiz %s", curr.i);
-        data[dataIdx++] = *into_cstring(str);
-      } else {
-        //is function
-
-        //is user function
-
-        //is system function
-        if( strcmp(curr.i,"printf")) {
-        }else{
-          text[textIdx++] = *into_cstring("li $v0, 4"); //system call code for printing string
-          //TODO we always print out_string...
-          text[textIdx++] = *into_cstring("la $a0, out_string"); //system call code for printn string
-          text[textIdx++] = *into_cstring("syscall"); //execute prev loaded syscall
-        }
-      }
-    }
-    //DATA Section
-    fprintf(pOutputFile, "        .data");
-    for(i = 0; i <= dataIdx; i++){
-      fprintf(pOutputFile, data[i].i);
-      fprintf(pOutputFile, "\n");
-    }
-    fprintf(pOutputFile, "\n");
-
-    //TEXT Section
-    fprintf(pOutputFile, "        .text");
-    for(i = 0; i <= dataIdx; i++){
-      fprintf(pOutputFile, text[i].i);
-      fprintf(pOutputFile, "\n");
-    }
-    fprintf(pOutputFile, "li $v0, 10");//load terminate program
-    fprintf(pOutputFile, "syscall");//execute prev loaded program
-  }
-  */
-
-  fclose(pInputFile);
-  exit(EXIT_SUCCESS);
 }

@@ -5,7 +5,7 @@ void addChild(tree* this, tree* child);
 //methods can only have 10 arguments
 int MAX_CHILDREN = 3;//10;
 
-tree* new_tree(token* root){
+tree* new_tree(expression* root){
   tree* t = (tree*) malloc(sizeof(tree));
   t->root = *root;
   //t->children = (tree**) malloc(sizeof(tree*) * MAX_CHILDREN);

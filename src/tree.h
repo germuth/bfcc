@@ -4,7 +4,7 @@
 #include "token.h"
 
 typedef struct {
-  token root;
+  expression root;
   struct tree* left;
   struct tree* middle;
   struct tree* right;
@@ -12,7 +12,7 @@ typedef struct {
   //tree** children;//list of pointers to children
 } tree;
 
-tree* new_tree(token* root);
+tree* new_tree(expression* root);
 //void addChild(tree* this, tree* child);
 
 #endif //TREE_H

@@ -5,7 +5,7 @@
 
 //l value & r value?
 typedef enum {LITERAL, FUNCTION, VARIABLE, DECLARATION, ASSIGNMENT,
-  OPERATOR, UNKNOWN} expression_type;
+  OPERATOR, ROOT, UNKNOWN} expression_type;
 typedef struct {
   token* tokens;
   int numTokens;
